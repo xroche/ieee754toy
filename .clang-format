@@ -1,0 +1,67 @@
+# This file configures clang-format with the suggested settings to be used when developing on the engine.
+#
+# This is not enforced right now, because we have some cases that cannot be automatically formatted by this
+# tool. For example, `if` condifion spanning over multiple lines should force the next open brace to be on its
+# own line, but there isn't any configuration to enforce this in clang-format:
+#
+#   Problem:
+#   ```cpp
+#   if (a == 0 and
+#       b == 1) {
+#       ThisIsConfusing();
+#   }
+#   ```
+#
+#   Expected Indentation:
+#   ```cpp
+#   if (a == 0 and
+#       b == 1)
+#   {
+#       ThisIsNotConfusing();
+#   }
+#   ```
+#
+#
+# To use it in VSCode:
+#   - Command + Shift + P
+#   - "Format Document With..."
+#   - Select Clang Format
+#
+# To integrate in Vim:
+# * Follow instruction on https://clang.llvm.org/docs/ClangFormat.html#vim-integration
+# * Replace `:pyf` by `:py3f` if you're using python3
+# To reformat latest commit diff:
+#   git diff -U0 --no-prefix --no-color HEAD^ | clang-format-diff -style file -i && git commit -a --amend --no-edit
+
+Language: Cpp
+BasedOnStyle: Mozilla
+
+# To match GitHub unified diff review view
+ColumnLimit: 115
+
+# Default indentation
+IndentWidth: 4
+
+# The extra indent or outdent of access modifiers, e.g. public:.
+AccessModifierOffset: -4
+
+# When splitting a line, make it obvious that it's not another indented statement
+ContinuationIndentWidth: 4
+
+# Allow begin/end headers inclusion
+SortIncludes: false
+
+# Don't break after return types of functions by default
+AlwaysBreakAfterReturnType: None
+AlwaysBreakAfterDefinitionReturnType: false
+
+FixNamespaceComments: true
+
+# Header list implementation
+IncludeCategories:
+  - Regex:           '^".*"'
+    Priority:        3
+  - Regex:           '^<.*>'
+    Priority:        5
+
+IncludeBlocks: Regroup
